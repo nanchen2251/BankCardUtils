@@ -21,12 +21,12 @@ import android.widget.Toast;
 
 public class ContentWithSpaceEditText extends AppCompatEditText {
 
-    private int contentType;
     public static final int TYPE_PHONE = 0;
-    public static final int TYPE_CARD = 1;
-    public static final int TYPE_IDCARD = 2;
-    private int maxLength = 100;
+    public static final int TYPE_BANK_CARD = 1;
+    public static final int TYPE_ID_CARD = 2;
     private int start, count,before;
+    private int contentType;
+    private int maxLength = 50;
     private String digits;
 
     public ContentWithSpaceEditText(Context context) {
@@ -46,6 +46,7 @@ public class ContentWithSpaceEditText extends AppCompatEditText {
     private void parseAttributeSet(Context context, AttributeSet attrs) {
         TypedArray ta = context.obtainStyledAttributes(attrs, R.styleable.ContentWithSpaceEditText, 0, 0);
         contentType = ta.getInt(R.styleable.ContentWithSpaceEditText_input_type, 0);
+        // 必须调用recycle
         ta.recycle();
         initType();
         setSingleLine();
@@ -57,11 +58,11 @@ public class ContentWithSpaceEditText extends AppCompatEditText {
             maxLength = 13;
             digits = "0123456789 ";
             setInputType(InputType.TYPE_CLASS_NUMBER);
-        } else if (contentType == TYPE_CARD) {
+        } else if (contentType == TYPE_BANK_CARD) {
             maxLength = 31;
             digits = "0123456789 ";
             setInputType(InputType.TYPE_CLASS_NUMBER);
-        } else if (contentType == TYPE_IDCARD) {
+        } else if (contentType == TYPE_ID_CARD) {
             maxLength = 21;
             digits = null;
             setInputType(InputType.TYPE_CLASS_TEXT);
@@ -71,9 +72,9 @@ public class ContentWithSpaceEditText extends AppCompatEditText {
 
     @Override
     public void setInputType(int type) {
-        if (contentType == TYPE_PHONE || contentType == TYPE_CARD) {
+        if (contentType == TYPE_PHONE || contentType == TYPE_BANK_CARD) {
             type = InputType.TYPE_CLASS_NUMBER;
-        }else if(contentType == TYPE_IDCARD){
+        }else if(contentType == TYPE_ID_CARD){
             type = InputType.TYPE_CLASS_TEXT;
         }
         super.setInputType(type);
@@ -83,6 +84,10 @@ public class ContentWithSpaceEditText extends AppCompatEditText {
         }
     }
 
+    /**
+     * 设置内容的类型
+     * @param contentType   类型
+     */
     public void setContentType(int contentType) {
         this.contentType = contentType;
         initType();
@@ -126,16 +131,11 @@ public class ContentWithSpaceEditText extends AppCompatEditText {
                     }
                 }
                 removeTextChangedListener(watcher);
-            /* 该处原来是调用setText(sb)。
-             * 但是如果调用该语句的话，在身份证输入框的情况下（允许字母和数字），当调用setText时，会导致输入法的跳转
-             * 参照网上解决方法，将该句话替换成s.replace(...)
-             * 该种方法不会导致输入法的跳转。
-             * 造成输入法跳转的原因可能是setText会重新唤起输入法控件*/
                 s.replace(0, s.length(),sb);
                 //如果是在末尾的话,或者加入的字符个数大于零的话（输入或者粘贴）
                 if (!isMiddle || count > 1) {
                     setSelection(s.length() <= maxLength ? s.length() : maxLength);
-                } else if (isMiddle) {
+                } else {
                     //如果是删除
                     if (count == 0) {
                         //如果删除时，光标停留在空格的前面，光标则要往前移一位
@@ -174,7 +174,7 @@ public class ContentWithSpaceEditText extends AppCompatEditText {
             } else {
                 return true;
             }
-        } else if (contentType == TYPE_CARD) {
+        } else if (contentType == TYPE_BANK_CARD) {
             if (TextUtils.isEmpty(text)) {
                 showShort(getContext(), "银行卡号不能为空，请输入正确的银行卡号");
             } else if (text.length() < 14) {
@@ -182,7 +182,7 @@ public class ContentWithSpaceEditText extends AppCompatEditText {
             } else {
                 return true;
             }
-        } else if (contentType == TYPE_IDCARD) {
+        } else if (contentType == TYPE_ID_CARD) {
             if (TextUtils.isEmpty(text)) {
                 showShort(getContext(), "身份证号不能为空，请输入正确的身份证号");
             } else if (text.length() < 18) {
@@ -201,9 +201,9 @@ public class ContentWithSpaceEditText extends AppCompatEditText {
     private boolean isSpace(int length) {
         if (contentType == TYPE_PHONE) {
             return isSpacePhone(length);
-        } else if (contentType == TYPE_CARD) {
+        } else if (contentType == TYPE_BANK_CARD) {
             return isSpaceCard(length);
-        } else if (contentType == TYPE_IDCARD) {
+        } else if (contentType == TYPE_ID_CARD) {
             return isSpaceIDCard(length);
         }
         return false;

@@ -3,6 +3,8 @@ package com.nanchen.bankcardutil;
 import java.util.regex.Pattern;
 
 /**
+ * 银行卡工具类
+ *
  * Author: nanchen
  * Email: liushilin520@foxmail.com
  * Date: 2017-11-28  13:26
