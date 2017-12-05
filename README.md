@@ -30,7 +30,7 @@ allprojects {
 ##### Step 2. Add the dependency
 ```java
 dependencies {
-	        compile 'com.github.nanchen2251:BankCardUtils:1.0.1'
+	        compile 'com.github.nanchen2251:BankCardUtils:1.0.2'
 
 	}
 ```
