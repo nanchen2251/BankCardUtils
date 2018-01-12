@@ -1,6 +1,8 @@
 # BankCardUtils
 根据银行卡号 获取 银行卡类型、银行名称和银行编码 自动格式化银行卡号、手机号、身份证号输入的工具类
 
+#### 号外：听说「nanchen」搞了一个 Android 开发者的免费福利，不行你看：[给 Android 开发者的一点福利：免费模拟面试](http://mp.weixin.qq.com/s/WRdSmGxwDp-CpQcSlmJYlg)
+
 ## 效果图<br>
 ![](https://github.com/nanchen2251/BankCardUtils/blob/master/GIF.gif)
 
